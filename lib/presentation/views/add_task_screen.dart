@@ -5,6 +5,7 @@ import 'package:todo/core/services/notification_service.dart';
 import 'package:todo/data/models/task.dart';
 import 'package:todo/presentation/view_models/task_view_model.dart';
 import 'package:todo/presentation/widgets/category_chip.dart';
+import 'package:todo/presentation/widgets/padded_card.dart';
 import 'package:todo/presentation/widgets/priority_chip.dart';
 
 class AddTaskScreen extends StatefulWidget {
@@ -35,7 +36,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         title: const Text('Add Task'),
         actions: [
@@ -114,15 +114,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   }
 
   Widget _buildCard(List<Widget> children) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(color: Colors.black12, blurRadius: 5, offset: Offset(0, 2)),
-        ],
-      ),
+    return PaddedCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: children,
@@ -143,7 +135,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         labelText: label,
         border: const OutlineInputBorder(),
         filled: true,
-        fillColor: Colors.grey.shade50,
       ),
       validator: (value) {
         if (required && (value == null || value.isEmpty)) {
