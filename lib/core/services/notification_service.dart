@@ -1,47 +1,67 @@
-// // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'package:timezone/timezone.dart' as tz;
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/material.dart';
 
-// class NotificationService {
-//   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
-//       FlutterLocalNotificationsPlugin();
+class NotificationService {
+  // Initialize notification settings (call this in main.dart)
+  static Future<void> initialize() async {
+    AwesomeNotifications().initialize(
+      null, // Use app icon or default
+      [
+        NotificationChannel(
+          channelKey: 'basic_channel',
+          channelName: 'Basic Notifications',
+          channelDescription: 'Notification channel for task reminders',
+          defaultColor: const Color(0xFF9D50DD),
+          ledColor: Colors.white,
+          importance: NotificationImportance.High,
+          channelShowBadge: true,
+        ),
+      ],
+    );
 
-//   static Future<void> init() async {
-//     const AndroidInitializationSettings initializationSettingsAndroid =
-//         AndroidInitializationSettings('@mipmap/ic_launcher');
+    // Request permission if not already granted
+    bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+    if (!isAllowed) {
+      await AwesomeNotifications().requestPermissionToSendNotifications();
+    }
+  }
 
-//     const InitializationSettings initializationSettings =
-//         InitializationSettings(android: initializationSettingsAndroid);
+  // Schedule a one-time notification
+  static Future<void> scheduleNotification({
+    required int id,
+    required String title,
+    required String body,
+    required DateTime scheduledDate,
+  }) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: id,
+        channelKey: 'basic_channel',
+        title: title,
+        body: body,
+        notificationLayout: NotificationLayout.Default,
+      ),
+      schedule: NotificationCalendar(
+        year: scheduledDate.year,
+        month: scheduledDate.month,
+        day: scheduledDate.day,
+        hour: scheduledDate.hour,
+        minute: scheduledDate.minute,
+        second: scheduledDate.second,
+        millisecond: 0,
+        repeats: false,
+        preciseAlarm: true,
+      ),
+    );
+  }
 
-//     await _notificationsPlugin.initialize(initializationSettings);
-//   }
+  // Cancel a scheduled notification by ID
+  static Future<void> cancelNotification(int id) async {
+    await AwesomeNotifications().cancel(id);
+  }
 
-//   static Future<void> scheduleNotification({
-//     required int id,
-//     required String title,
-//     required String body,
-//     required DateTime scheduledDate,
-//   }) async {
-//     await _notificationsPlugin.zonedSchedule(
-//       id,
-//       title,
-//       body,
-//       tz.TZDateTime.from(scheduledDate, tz.local),
-//       const NotificationDetails(
-//         android: AndroidNotificationDetails(
-//           'task_reminder_channel',
-//           'Task Reminders',
-//           channelDescription: 'Channel for task reminder notifications',
-//           importance: Importance.high,
-//           priority: Priority.high,
-//         ),
-//       ),
-//       androidAllowWhileIdle: true,
-//       uiLocalNotificationDateInterpretation:
-//           UILocalNotificationDateInterpretation.absoluteTime,
-//     );
-//   }
-
-//   static Future<void> cancelNotification(int id) async {
-//     await _notificationsPlugin.cancel(id);
-//   }
-// }
+  // Cancel all notifications (optional)
+  static Future<void> cancelAllNotifications() async {
+    await AwesomeNotifications().cancelAll();
+  }
+}
