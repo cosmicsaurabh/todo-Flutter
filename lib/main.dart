@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/core/services/hive_service.dart';
-// import 'package:todo/core/services/notification_service.dart';
+import 'package:todo/core/services/notification_service.dart';
 import 'package:todo/data/repositories.dart/task_repository.dart';
 import 'package:todo/presentation/view_models/task_view_model.dart';
 import 'package:todo/presentation/view_models/theme_view_model.dart';
@@ -12,9 +12,9 @@ Future<void> main() async {
 
   // Initialize services
   await HiveService.init();
-  // await NotificationService.init();
   // Get the Hive box for tasks
   final taskBox = HiveService.getTaskBox();
+  await NotificationService.initialize();
 
   runApp(
     MultiProvider(

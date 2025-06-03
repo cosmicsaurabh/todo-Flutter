@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/core/services/notification_service.dart';
 import 'package:todo/data/models/task.dart';
 import 'package:todo/presentation/view_models/task_view_model.dart';
 import 'package:todo/presentation/widgets/category_chip.dart';
@@ -217,14 +218,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           _reminderTime!.minute,
         );
 
-        // if (notificationTime.isAfter(DateTime.now())) {
-        //   NotificationService.scheduleNotification(
-        //     id: task.id.hashCode,
-        //     title: 'Task Reminder',
-        //     body: task.title,
-        //     scheduledDate: notificationTime,
-        //   );
-        // }
+        if (notificationTime.isAfter(DateTime.now())) {
+          NotificationService.scheduleNotification(
+            id: task.id.hashCode,
+            title: 'Task Reminder',
+            body: task.title,
+            scheduledDate: notificationTime,
+          );
+        }
       }
 
       Navigator.pop(context);
