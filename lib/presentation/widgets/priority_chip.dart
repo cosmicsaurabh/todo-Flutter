@@ -4,7 +4,7 @@ import 'package:todo/data/models/task.dart';
 class PriorityChip extends StatelessWidget {
   final TaskPriority priority;
   final bool isSelected;
-  final Function(bool) onSelected;
+  final ValueChanged<bool> onSelected;
 
   const PriorityChip({
     super.key,
@@ -19,7 +19,7 @@ class PriorityChip extends StatelessWidget {
 
     return FilterChip(
       label: Text(
-        priority.toString().split('.').last,
+        priority.name[0].toUpperCase() + priority.name.substring(1),
         style: TextStyle(color: isSelected ? Colors.white : color),
       ),
       selected: isSelected,
