@@ -5,7 +5,7 @@ import 'package:todo/presentation/view_models/task_view_model.dart';
 import 'package:todo/presentation/view_models/theme_view_model.dart';
 import 'package:todo/presentation/views/add_task_screen.dart';
 import 'package:todo/presentation/widgets/category_chip.dart';
-import 'package:todo/presentation/widgets/priority_picker.dart';
+import 'package:todo/presentation/widgets/priority_chip.dart';
 import 'package:todo/presentation/widgets/task_tile.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -127,11 +127,18 @@ class HomeScreen extends StatelessWidget {
                 ),
               );
             }),
-            const SizedBox(width: 8),
-            PriorityPicker(
-              selectedPriority: taskVM.selectedPriority,
-              onPrioritySelected: taskVM.setSelectedPriority,
-            ),
+            ...TaskPriority.values.map((priority) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: PriorityChip(
+                  priority: priority,
+                  isSelected: taskVM.selectedPriority == priority,
+                  onSelected: (selected) {
+                    taskVM.setSelectedPriority(selected ? priority : null);
+                  },
+                ),
+              );
+            }),
           ],
         ),
       ),

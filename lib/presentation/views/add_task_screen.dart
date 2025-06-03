@@ -5,7 +5,7 @@ import 'package:todo/core/services/notification_service.dart';
 import 'package:todo/data/models/task.dart';
 import 'package:todo/presentation/view_models/task_view_model.dart';
 import 'package:todo/presentation/widgets/category_chip.dart';
-import 'package:todo/presentation/widgets/priority_picker.dart';
+import 'package:todo/presentation/widgets/priority_chip.dart';
 
 class AddTaskScreen extends StatefulWidget {
   const AddTaskScreen({super.key});
@@ -35,74 +35,77 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        title: const Text('Add New Task'),
+        title: const Text('Add Task'),
         actions: [
-          IconButton(icon: const Icon(Icons.save), onPressed: _saveTask),
+          IconButton(icon: const Icon(Icons.check), onPressed: _saveTask),
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(
-                controller: _titleController,
-                decoration: const InputDecoration(
-                  labelText: 'Title*',
-                  border: OutlineInputBorder(),
+              _buildCard([
+                _buildTextField('Title*', _titleController, required: true),
+                const SizedBox(height: 12),
+                _buildTextField(
+                  'Description',
+                  _descriptionController,
+                  maxLines: 3,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a title';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _descriptionController,
-                decoration: const InputDecoration(
-                  labelText: 'Description',
-                  border: OutlineInputBorder(),
+              ]),
+              const SizedBox(height: 12),
+              _buildCard([
+                _buildDatePicker(),
+                const SizedBox(height: 12),
+                _buildReminderToggle(),
+              ]),
+              const SizedBox(height: 12),
+              _buildCard([
+                const Text(
+                  'Priority',
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                maxLines: 3,
-              ),
-              const SizedBox(height: 16),
-              _buildDatePicker(),
-              const SizedBox(height: 16),
-              _buildReminderToggle(),
-              const SizedBox(height: 16),
-              const Text('Priority:'),
-              PriorityPicker(
-                selectedPriority: _priority,
-                onPrioritySelected: (priority) {
-                  setState(() {
-                    _priority = priority;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              const Text('Category:'),
-              Wrap(
-                spacing: 8,
-                children:
-                    TaskCategory.values.map((category) {
-                      return CategoryChip(
-                        category: category,
-                        isSelected: _category == category,
-                        onSelected: (selected) {
-                          if (selected) {
-                            setState(() {
-                              _category = category;
-                            });
-                          }
-                        },
-                      );
-                    }).toList(),
-              ),
+
+                Wrap(
+                  spacing: 8,
+                  children:
+                      TaskPriority.values.map((priority) {
+                        return PriorityChip(
+                          priority: priority,
+                          isSelected: _priority == priority,
+                          onSelected: (selected) {
+                            if (selected) {
+                              setState(() => _priority = priority);
+                            }
+                          },
+                        );
+                      }).toList(),
+                ),
+              ]),
+              const SizedBox(height: 12),
+              _buildCard([
+                const Text(
+                  'Category',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Wrap(
+                  spacing: 8,
+                  children:
+                      TaskCategory.values.map((category) {
+                        return CategoryChip(
+                          category: category,
+                          isSelected: _category == category,
+                          onSelected: (selected) {
+                            if (selected) setState(() => _category = category);
+                          },
+                        );
+                      }).toList(),
+                ),
+              ]),
             ],
           ),
         ),
@@ -110,51 +113,82 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     );
   }
 
+  Widget _buildCard(List<Widget> children) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(color: Colors.black12, blurRadius: 5, offset: Offset(0, 2)),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: children,
+      ),
+    );
+  }
+
+  Widget _buildTextField(
+    String label,
+    TextEditingController controller, {
+    bool required = false,
+    int maxLines = 1,
+  }) {
+    return TextFormField(
+      controller: controller,
+      maxLines: maxLines,
+      decoration: InputDecoration(
+        labelText: label,
+        border: const OutlineInputBorder(),
+        filled: true,
+        fillColor: Colors.grey.shade50,
+      ),
+      validator: (value) {
+        if (required && (value == null || value.isEmpty)) {
+          return 'This field is required';
+        }
+        return null;
+      },
+    );
+  }
+
   Widget _buildDatePicker() {
-    return Row(
-      children: [
-        Expanded(
-          child: InkWell(
-            onTap: () => _pickDate(context),
-            child: InputDecorator(
-              decoration: const InputDecoration(
-                labelText: 'Due Date',
-                border: OutlineInputBorder(),
-              ),
-              child: Text(
-                _dueDate == null
-                    ? 'Select date'
-                    : DateFormat('MMM dd, yyyy').format(_dueDate!),
-              ),
-            ),
-          ),
+    return GestureDetector(
+      onTap: () => _pickDate(context),
+      child: InputDecorator(
+        decoration: const InputDecoration(
+          labelText: 'Due Date',
+          border: OutlineInputBorder(),
         ),
-        if (_dueDate != null)
-          IconButton(
-            icon: const Icon(Icons.clear),
-            onPressed: () {
-              setState(() {
-                _dueDate = null;
-              });
-            },
-          ),
-      ],
+        child: Text(
+          _dueDate == null
+              ? 'Select date'
+              : DateFormat('EEE, MMM dd, yyyy').format(_dueDate!),
+          style: const TextStyle(fontSize: 16),
+        ),
+      ),
     );
   }
 
   Widget _buildReminderToggle() {
-    return SwitchListTile(
-      title: const Text('Set Reminder'),
-      value: _hasReminder,
-      onChanged: (value) {
-        setState(() {
-          _hasReminder = value;
-          if (value && _dueDate != null) {
-            _pickTime(context);
-          }
-        });
-      },
-      secondary: const Icon(Icons.notifications),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Text('Set Reminder', style: TextStyle(fontSize: 16)),
+        Switch(
+          value: _hasReminder,
+          onChanged: (value) {
+            setState(() {
+              _hasReminder = value;
+              if (value && _dueDate != null) {
+                _pickTime(context);
+              }
+            });
+          },
+        ),
+      ],
     );
   }
 
@@ -165,15 +199,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
-
     if (pickedDate != null) {
-      setState(() {
-        _dueDate = pickedDate;
-      });
-
-      if (_hasReminder) {
-        await _pickTime(context);
-      }
+      setState(() => _dueDate = pickedDate);
+      if (_hasReminder) await _pickTime(context);
     }
   }
 
@@ -182,11 +210,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       context: context,
       initialTime: TimeOfDay.now(),
     );
-
     if (pickedTime != null) {
-      setState(() {
-        _reminderTime = pickedTime;
-      });
+      setState(() => _reminderTime = pickedTime);
     }
   }
 
