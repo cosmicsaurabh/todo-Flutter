@@ -20,6 +20,14 @@ class ThemeViewModel with ChangeNotifier {
       backgroundColor: AppColors.primary,
       foregroundColor: Colors.white,
     ),
+    cardTheme: const CardTheme(
+      color: Colors.white,
+      shadowColor: Colors.black26,
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(24)),
+      ),
+    ),
   );
 
   final ThemeData _darkTheme = ThemeData(
@@ -30,6 +38,14 @@ class ThemeViewModel with ChangeNotifier {
       secondary: AppColors.secondaryDark,
     ),
     appBarTheme: const AppBarTheme(backgroundColor: AppColors.primaryDark),
+    cardTheme: const CardTheme(
+      color: Colors.white70,
+      shadowColor: Colors.black26,
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(24)),
+      ),
+    ),
   );
 
   void toggleTheme() {

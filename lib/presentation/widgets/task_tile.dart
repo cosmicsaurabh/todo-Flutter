@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:todo/data/models/task.dart';
+import 'package:todo/presentation/widgets/padded_card.dart';
 
 class TaskTile extends StatelessWidget {
   final Task task;
@@ -34,8 +35,7 @@ class TaskTile extends StatelessWidget {
             ),
           ],
         ),
-        child: Card(
-          elevation: 2,
+        child: PaddedCard(
           child: CheckboxListTile(
             title: Text(
               task.title,
