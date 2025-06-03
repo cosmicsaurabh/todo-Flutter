@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todo/app_colors.dart';
 import 'package:todo/core/constants/app_colors.dart';
 
 class ThemeViewModel with ChangeNotifier {
@@ -17,11 +16,11 @@ class ThemeViewModel with ChangeNotifier {
     colorScheme: ColorScheme.light(
       primary: CustomAppColors.primary,
       secondary: CustomAppColors.secondary,
-      surface: CustomAppColors.backgroundLight,
+      surface: CustomAppColors.surface,
       error: CustomAppColors.error,
       onPrimary: CustomAppColors.onPrimary,
       onSecondary: CustomAppColors.onSecondary,
-      onSurface: CustomAppColors.textLight,
+      onSurface: CustomAppColors.onSurface,
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: CustomAppColors.primary,
@@ -30,7 +29,7 @@ class ThemeViewModel with ChangeNotifier {
       centerTitle: true,
     ),
     cardTheme: CardTheme(
-      color: CustomAppColors.surfaceLight,
+      color: CustomAppColors.surface,
       elevation: 1,
       margin: const EdgeInsets.all(16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

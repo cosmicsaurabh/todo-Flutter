@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppColors {
+class CustomAppColors {
   // Light Theme Colors
   static const Color primary = Color(0xFF5F52EE);
   static const Color secondary = Color(0xFF03DAC6);
@@ -35,4 +35,10 @@ class AppColors {
   static const Color personalCategory = Color(0xFF4CAF50);
   static const Color shoppingCategory = Color(0xFFFF9800);
   static const Color othersCategory = Color(0xFF9C27B0);
+
+  // Text Colors
+  static const Color textLight = Color(0xFF212121);
+  static const Color textDark = Colors.white;
+  static const Color dividerLight = Color(0xFFBDBDBD);
+  static const Color dividerDark = Color(0xFF424242);
 }
