@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/app_colors.dart';
 import 'package:todo/core/constants/app_colors.dart';
 
 class ThemeViewModel with ChangeNotifier {
@@ -9,42 +10,84 @@ class ThemeViewModel with ChangeNotifier {
 
   ThemeData get currentTheme => isDarkMode ? _darkTheme : _lightTheme;
 
+  // Light Theme Configuration
   final ThemeData _lightTheme = ThemeData(
+    useMaterial3: true, // Enable Material 3 design
     brightness: Brightness.light,
-    primaryColor: AppColors.primary,
-    colorScheme: const ColorScheme.light(
-      primary: AppColors.primary,
-      secondary: AppColors.secondary,
+    colorScheme: ColorScheme.light(
+      primary: CustomAppColors.primary,
+      secondary: CustomAppColors.secondary,
+      surface: CustomAppColors.backgroundLight,
+      error: CustomAppColors.error,
+      onPrimary: CustomAppColors.onPrimary,
+      onSecondary: CustomAppColors.onSecondary,
+      onSurface: CustomAppColors.textLight,
     ),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.primary,
-      foregroundColor: Colors.white,
+    appBarTheme: AppBarTheme(
+      backgroundColor: CustomAppColors.primary,
+      foregroundColor: CustomAppColors.onPrimary,
+      elevation: 0,
+      centerTitle: true,
     ),
-    cardTheme: const CardTheme(
-      color: Colors.white,
-      shadowColor: Colors.black26,
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(24)),
+    cardTheme: CardTheme(
+      color: CustomAppColors.surfaceLight,
+      elevation: 1,
+      margin: const EdgeInsets.all(16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      surfaceTintColor: Colors.transparent,
+    ),
+    textTheme: TextTheme(
+      displayLarge: TextStyle(
+        color: CustomAppColors.textLight,
+        fontWeight: FontWeight.bold,
       ),
+      // Add other text styles as needed
     ),
+    dividerTheme: DividerThemeData(
+      color: CustomAppColors.dividerLight,
+      thickness: 1,
+      space: 1,
+    ),
+    // Add other theme properties as needed
   );
 
+  // Dark Theme Configuration
   final ThemeData _darkTheme = ThemeData(
+    useMaterial3: true,
     brightness: Brightness.dark,
-    primaryColor: AppColors.primaryDark,
-    colorScheme: const ColorScheme.dark(
-      primary: AppColors.primaryDark,
-      secondary: AppColors.secondaryDark,
+    colorScheme: ColorScheme.dark(
+      primary: CustomAppColors.primaryDark,
+      secondary: CustomAppColors.secondaryDark,
+      surface: CustomAppColors.backgroundDark,
+      error: CustomAppColors.errorDark,
+      onPrimary: CustomAppColors.onPrimaryDark,
+      onSecondary: CustomAppColors.onSecondaryDark,
+      onSurface: CustomAppColors.textDark,
     ),
-    appBarTheme: const AppBarTheme(backgroundColor: AppColors.primaryDark),
-    cardTheme: const CardTheme(
-      color: Colors.white70,
-      shadowColor: Colors.black26,
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(24)),
+    appBarTheme: AppBarTheme(
+      backgroundColor: CustomAppColors.backgroundDark,
+      foregroundColor: CustomAppColors.textDark,
+      elevation: 0,
+      centerTitle: true,
+    ),
+    cardTheme: CardTheme(
+      color: CustomAppColors.surfaceDark,
+      elevation: 1,
+      margin: const EdgeInsets.all(16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      surfaceTintColor: Colors.transparent,
+    ),
+    textTheme: TextTheme(
+      displayLarge: TextStyle(
+        color: CustomAppColors.textDark,
+        fontWeight: FontWeight.bold,
       ),
+      // Add other text styles as needed
+    ),
+    dividerTheme: DividerThemeData(
+      color: CustomAppColors.dividerDark,
+      thickness: 1,
+      space: 1,
     ),
   );
 
